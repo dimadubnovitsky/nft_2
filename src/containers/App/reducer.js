@@ -252,7 +252,7 @@ const globalReducer = handleActions(
       draft.ownedBlocks.push({
         size: 5,
         ownerId: draft.user.id,
-        iconId: draft.blockIcons.length + 1,
+        iconId: draft.blockIcons.length,
         price: block.price,
         availableForSale: true,
         blockIDs: [block.id],
