@@ -46,6 +46,14 @@ const BlockView = ({ block, onEdit, isMyLand, isOwned, onPurchase, isNew }) => {
                 Buy NFT Now
               </div>
             )}
+            {isOwned && !isMyLand && !offer && (
+              <div
+                className={styles.buttonOffer}
+                onClick={() => setOffer(true)}
+              >
+                Buy NFT Now
+              </div>
+            )}
             {isOwned && offer && (
               <>
                 <div className={styles.inputPrice}>
