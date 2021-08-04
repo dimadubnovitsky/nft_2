@@ -1,0 +1,75 @@
+.wrapper {
+  width: 100%;
+  padding: 24px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #000000;
+}
+
+.leftContent {
+  display: flex;
+  align-items: center;
+
+  .logo {
+    width: 40px;
+    margin-right: 40px;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .reload {
+    width: 22px;
+    cursor: pointer;
+
+    img {
+      display: block;
+      width: 100%;
+    }
+  }
+}
+
+.title {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 800;
+  font-size: 36px;
+  line-height: 41px;
+  color: #AFC7FF;
+}
+
+.buttonConnect {
+  padding: 7px 18px;
+  border: 2px solid #AFC7FF;
+  border-radius: 10px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 22px;
+  color: #AFC7FF;
+  cursor: pointer;
+}
+
+.wallet {
+  display: flex;
+  align-items: center;
+
+  .walletId {
+    padding-right: 10px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 130%;
+    color: #E5E8EB;
+    opacity: 0.7;
+  }
+
+  .buttonWallet {
+    width: 40px;
+
+    img {
+      width: 100%;
+    }
+  }
+}

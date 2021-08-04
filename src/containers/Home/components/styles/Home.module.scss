@@ -1,0 +1,29 @@
+.root {
+  min-height: 100vh;
+  text-align: center;
+}
+
+.container {
+  position: relative;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  img {
+    width: 100%;
+  }
+}
+
+.blocks {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}

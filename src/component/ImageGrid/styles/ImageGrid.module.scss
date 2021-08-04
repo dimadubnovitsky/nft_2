@@ -1,0 +1,16 @@
+.root {
+  cursor: pointer;
+  :global {
+    .ReactCrop__drag-handle {
+      display: none;
+    }
+
+    .ReactCrop__crop-selection {
+      border: none;
+      cursor: pointer;
+      background: rgba(49, 107, 255, 0.9);
+      box-shadow: none;
+      z-index: 1;
+    }
+  }
+}
