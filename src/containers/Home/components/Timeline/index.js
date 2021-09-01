@@ -12,7 +12,9 @@ import { withStyles } from '@material-ui/core';
 import { updateTimeline } from '../../../App/actions';
 import timelineStyle from './styles/timelineStyle';
 import arrowUp from '../../../../images/arrow_up.svg';
-import { Spring, animated } from 'react-spring';
+import { Spring, animated, Transition } from 'react-spring';
+import Slider from '@material-ui/core/Slider';
+import Grid from '@material-ui/core/Grid';
 
 const TimelineTransition = ({ classes, children, from, to, visible = true }) =>
   visible && (
@@ -98,8 +100,7 @@ const FirstTimelineItem = ({
     <TimelineTransition classes={classes} from={from} to={to}>
       <div
         className={classNames(classes.dateWrapper, {
-          [classes.dateWrapperCurrent]: index === timeline && index === 0,
-          [classes.dateWrapperOutside]: index === 0,
+          [classes.dateWrapperOutsideTop]: index === 0 && index !== timeline,
         })}
       >
         {index !== 0 && (
@@ -251,8 +252,8 @@ const SixthTimelineItem = ({
     <TimelineTransition classes={classes} from={from} to={to}>
       <div
         className={classNames(classes.dateWrapper, {
-          [classes.dateWrapperCurrent]: index === timeline && index !== 0,
-          [classes.dateWrapperOutside]: index === history.length - 1,
+          [classes.dateWrapperOutsideBot]:
+            index === history.length - 1 && index !== timeline,
         })}
       >
         <img
@@ -273,72 +274,134 @@ const SixthTimelineItem = ({
   );
 };
 
+const CustomThumbComponent = (sliderProps, classes, history, timeline) => (
+  <div {...sliderProps}>
+    <di className={classes.thumdWrapper}>
+      {timeline !== 0 && <img src={arrowUp} className={classes.thumdArrowUp} />}
+      <div className={classes.date}>
+        {history.find((historyItem, index) => index === timeline).date}
+      </div>
+      {timeline + 1 !== history.length && (
+        <img src={arrowUp} className={classes.thumdArrowDown} />
+      )}
+    </di>
+  </div>
+);
+
 // TODO: Scale solution to infinite number of timelineItems. For now it works with limited amount of entries.
 class TimeLine extends React.PureComponent {
   render() {
     const { classes, history, timeline, isTimeline, dispatchUpdateTimeline } =
       this.props;
 
+    const handleSliderChange = (event, newValue) => {
+      dispatchUpdateTimeline(Math.abs(newValue));
+    };
+
     return (
-      isTimeline && (
-        <div className={classes.root}>
-          <div className={classes.timeline}>
-            {history.map((historyItem, index) => (
-              <div
-                className={classes.timelineSection}
-                onClick={
-                  timeline !== index && (() => dispatchUpdateTimeline(index))
-                }
-              >
-                <FirstTimelineItem
-                  classes={classes}
-                  index={index}
-                  timeline={timeline}
-                  history={history}
-                  historyItem={historyItem}
-                  dispatchUpdateTimeline={dispatchUpdateTimeline}
-                />
-                <SecondTimelineItem
-                  classes={classes}
-                  index={index}
-                  timeline={timeline}
-                  history={history}
-                  historyItem={historyItem}
-                />
-                <ThirdTimelineItem
-                  classes={classes}
-                  index={index}
-                  timeline={timeline}
-                  history={history}
-                  historyItem={historyItem}
-                />
-                <FourthTimelineItem
-                  classes={classes}
-                  index={index}
-                  timeline={timeline}
-                  history={history}
-                  historyItem={historyItem}
-                />
-                <FifthTimelineItem
-                  classes={classes}
-                  index={index}
-                  timeline={timeline}
-                  history={history}
-                  historyItem={historyItem}
-                />
-                <SixthTimelineItem
-                  classes={classes}
-                  index={index}
-                  timeline={timeline}
-                  history={history}
-                  historyItem={historyItem}
-                  dispatchUpdateTimeline={dispatchUpdateTimeline}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      )
+      <Transition
+        items={isTimeline}
+        from={{ opacity: 0 }}
+        enter={{ opacity: 1 }}
+        leave={{ opacity: 0 }}
+      >
+        {(style, springIsTimeline) =>
+          springIsTimeline && (
+            <animated.div className={classes.root} style={style}>
+              <Grid container>
+                <Grid item>
+                  <div className={classes.timeline}>
+                    {history.map((historyItem, index) => (
+                      <div
+                        className={classes.timelineSection}
+                        onClick={
+                          timeline !== index
+                            ? () => dispatchUpdateTimeline(index)
+                            : undefined
+                        }
+                        key={historyItem.date}
+                      >
+                        <FirstTimelineItem
+                          classes={classes}
+                          index={index}
+                          timeline={timeline}
+                          history={history}
+                          historyItem={historyItem}
+                          dispatchUpdateTimeline={dispatchUpdateTimeline}
+                        />
+                        <SecondTimelineItem
+                          classes={classes}
+                          index={index}
+                          timeline={timeline}
+                          history={history}
+                          historyItem={historyItem}
+                        />
+                        <ThirdTimelineItem
+                          classes={classes}
+                          index={index}
+                          timeline={timeline}
+                          history={history}
+                          historyItem={historyItem}
+                        />
+                        <FourthTimelineItem
+                          classes={classes}
+                          index={index}
+                          timeline={timeline}
+                          history={history}
+                          historyItem={historyItem}
+                        />
+                        <FifthTimelineItem
+                          classes={classes}
+                          index={index}
+                          timeline={timeline}
+                          history={history}
+                          historyItem={historyItem}
+                        />
+                        <SixthTimelineItem
+                          classes={classes}
+                          index={index}
+                          timeline={timeline}
+                          history={history}
+                          historyItem={historyItem}
+                          dispatchUpdateTimeline={dispatchUpdateTimeline}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </Grid>
+                <Grid item>
+                  <Slider
+                    orientation="vertical"
+                    step={1}
+                    min={-Math.abs(history.length - 1)}
+                    max={0}
+                    value={
+                      typeof timeline === 'number' ? -Math.abs(timeline) : 0
+                    }
+                    classes={{
+                      thumb: classNames(
+                        classes.thumb,
+                        classes[`thumb${timeline}`],
+                      ),
+                      rail: classes.rail,
+                      track: classes.track,
+                    }}
+                    onChange={handleSliderChange}
+                    ThumbComponent={(sliderProps) =>
+                      CustomThumbComponent(
+                        sliderProps,
+                        classes,
+                        history,
+                        timeline,
+                      )
+                    }
+                  />
+                </Grid>
+              </Grid>
+            </animated.div>
+          )
+        }
+      </Transition>
     );
   }
 }

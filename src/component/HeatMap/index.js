@@ -2,6 +2,7 @@ import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { animated, Transition } from 'react-spring';
 import {
   makeSelectHeatMap,
   makeSelectIsHeatMap,
@@ -14,11 +15,20 @@ class HeatMap extends React.PureComponent {
     const { heatMap, isHeatMap } = this.props;
 
     return (
-      isHeatMap && (
-        <div className={styles.root}>
-          <img src={heatMap} alt="" />
-        </div>
-      )
+      <Transition
+        items={isHeatMap}
+        from={{ opacity: 0 }}
+        enter={{ opacity: 1 }}
+        leave={{ opacity: 0 }}
+      >
+        {(style, springIsHeatMap) =>
+          springIsHeatMap && (
+            <animated.div className={styles.root} style={style}>
+              <img src={heatMap} alt="" />
+            </animated.div>
+          )
+        }
+      </Transition>
     );
   }
 }

@@ -1,9 +1,9 @@
 const timelineStyle = (theme) => ({
   root: {
-    padding: '0 70px 0 20px',
+    paddingLeft: '20px',
   },
   timeline: {
-    maxWidth: '80px',
+    width: '80px',
   },
   timelineSection: {
     width: '100%',
@@ -18,6 +18,24 @@ const timelineStyle = (theme) => ({
       margin: 0,
     },
   },
+  thumb: {
+    backgroundColor: 'transparent',
+    '&:focus, &:hover, &$active': {
+      boxShadow: 'inherit',
+    },
+    marginLeft: '15px !important',
+    marginBottom: '0px !important',
+  },
+  rail: {
+    backgroundColor: 'transparent',
+  },
+  track: {
+    backgroundColor: 'transparent',
+  },
+  thumdWrapper: {
+    width: 'max-content',
+    flexDirection: 'column',
+  },
   dateWrapper: {
     display: 'none',
     position: 'absolute',
@@ -31,10 +49,16 @@ const timelineStyle = (theme) => ({
   dateWrapperCurrent: {
     display: 'flex',
   },
-  dateWrapperOutside: {
+  dateWrapperOutsideTop: {
     display: 'flex',
+    transform: 'translate(0, -85%)',
+  },
+  dateWrapperOutsideBot: {
+    display: 'flex',
+    transform: 'translate(0, -15%)',
   },
   date: {
+    width: 'max-content',
     padding: '4px 0',
     fontFamily: 'Open Sans, sans-serif',
     fontWeight: '500',
@@ -53,6 +77,50 @@ const timelineStyle = (theme) => ({
     opacity: '0.6',
     marginLeft: '5px',
     transform: 'rotate(180deg)',
+  },
+  thumdArrowUp: {
+    width: '20px',
+    opacity: '0.6',
+    marginLeft: '-17px',
+  },
+  thumdArrowDown: {
+    width: '20px',
+    opacity: '0.6',
+    marginLeft: '-17px',
+    transform: 'rotate(180deg)',
+  },
+  thumb1: {
+    bottom: '80.5% !important',
+  },
+  thumb2: {
+    bottom: '73.5% !important',
+  },
+  thumb3: {
+    bottom: '67% !important',
+  },
+  thumb4: {
+    bottom: '60% !important',
+  },
+  thumb5: {
+    bottom: '53.5% !important',
+  },
+  thumb6: {
+    bottom: '47% !important',
+  },
+  thumb7: {
+    bottom: '40% !important',
+  },
+  thumb8: {
+    bottom: '33.5% !important',
+  },
+  thumb9: {
+    bottom: '26.5% !important',
+  },
+  thumb10: {
+    bottom: '20% !important',
+  },
+  thumb11: {
+    bottom: '13% !important',
   },
 });
 

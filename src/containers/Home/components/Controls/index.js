@@ -1,8 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { animated, Transition } from 'react-spring';
 import {
   makeSelectFilters,
   makeSelectIsFilters,
@@ -30,8 +30,8 @@ import {
 import HearMapRangeImage from './assets/images/heatMapRange.png';
 import controlsStyle from './styles/controlsStyle';
 
-const Control = ({ classes, name, value, icon: Icon, onChange }) => (
-  <Box paddingX={2} textAlign="right">
+const Control = ({ classes, name, value, icon: Icon, onChange, style }) => (
+  <Box paddingX={2} textAlign="right" component={animated.div} style={style}>
     <Checkbox
       classes={{
         root: classes.control,
@@ -52,11 +52,11 @@ const filtersMessages = {
   unavailable: 'Unavailable',
 };
 
-const Filters = ({ filters, dispatchUpdateFilters, classes }) => (
-  <div className={classes.filtersWrapper}>
+const Filters = ({ filters, dispatchUpdateFilters, classes, style }) => (
+  <animated.div className={classes.filtersWrapper} style={style}>
     <div className={classes.filtersContent}>
       {Object.keys(filters).map((key) => (
-        <div>
+        <div key={key}>
           <FormControlLabel
             label={filtersMessages[key]}
             classes={{
@@ -79,11 +79,11 @@ const Filters = ({ filters, dispatchUpdateFilters, classes }) => (
         </div>
       ))}
     </div>
-  </div>
+  </animated.div>
 );
 
-const HeatMap = ({ classes }) => (
-  <div className={classes.mapWrapper}>
+const HeatMap = ({ classes, style }) => (
+  <animated.div className={classes.mapWrapper} style={style}>
     <div className={classes.mapContent}>
       <Box padding={2}>
         <Grid container spacing={2}>
@@ -110,14 +110,10 @@ const HeatMap = ({ classes }) => (
         </Grid>
       </Box>
     </div>
-  </div>
+  </animated.div>
 );
 
 class Controls extends React.PureComponent {
-  static propTypes = {
-    loading: PropTypes.bool.isRequired,
-  };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -165,57 +161,83 @@ class Controls extends React.PureComponent {
             />
           </Box>
         </Grid>
-        {this.state.controls && (
-          <>
+        <Transition
+          items={
+            this.state.controls
+              ? [
+                  {
+                    name: 'isFilters',
+                    value: isFilters,
+                    onChange: (event, value) => dispatchUpdateIsFilters(value),
+                    icon: FilterListIcon,
+                  },
+                  {
+                    name: 'isTimeline',
+                    value: isTimeline,
+                    onChange: (event, value) => dispatchUpdateIsTimeline(value),
+                    icon: TimerIcon,
+                  },
+                  {
+                    name: 'isHeatMap',
+                    value: isHeatMap,
+                    onChange: (event, value) => dispatchUpdateIsHeatMap(value),
+                    icon: WhatshotIcon,
+                  },
+                ]
+              : []
+          }
+          keys={(key) => key.name}
+          trail={100}
+          from={{ opacity: 0 }}
+          enter={{ opacity: 1 }}
+          leave={{ opacity: 0 }}
+        >
+          {(style, { name, value, onChange, icon, ...item }) => (
             <Grid item xs={12}>
               <Control
                 classes={classes}
-                name="isFilters"
-                value={isFilters}
-                onChange={(event, value) => {
-                  dispatchUpdateIsFilters(value);
-                }}
-                icon={FilterListIcon}
+                name={name}
+                value={value}
+                onChange={onChange}
+                icon={icon}
+                style={style}
               />
             </Grid>
-            <Grid item xs={12}>
-              <Control
-                classes={classes}
-                name="isTimeline"
-                value={isTimeline}
-                onChange={(event, value) => {
-                  dispatchUpdateIsTimeline(value);
-                }}
-                icon={TimerIcon}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Control
-                classes={classes}
-                name="isHeatMap"
-                value={isHeatMap}
-                onChange={(event, value) => {
-                  dispatchUpdateIsHeatMap(value);
-                }}
-                icon={WhatshotIcon}
-              />
-            </Grid>
-          </>
-        )}
-        {isFilters && (
-          <Grid item xs={12}>
-            <Filters
-              filters={filters}
-              dispatchUpdateFilters={dispatchUpdateFilters}
-              classes={classes}
-            />
-          </Grid>
-        )}
-        {isHeatMap && (
-          <Grid item xs={12}>
-            <HeatMap classes={classes} />
-          </Grid>
-        )}
+          )}
+        </Transition>
+        <Transition
+          items={isFilters}
+          from={{ opacity: 0 }}
+          enter={{ opacity: 1 }}
+          leave={{ opacity: 0 }}
+        >
+          {(style, springIsFilters) =>
+            springIsFilters && (
+              <Grid item xs={12}>
+                <Filters
+                  filters={filters}
+                  dispatchUpdateFilters={dispatchUpdateFilters}
+                  classes={classes}
+                  style={style}
+                />
+              </Grid>
+            )
+          }
+        </Transition>
+        <Transition
+          items={isHeatMap}
+          from={{ opacity: 0 }}
+          enter={{ opacity: 1 }}
+          leave={{ opacity: 0 }}
+        >
+          {(style, springIsHeatMap) =>
+            springIsHeatMap && (
+              <Grid item xs={12}>
+                <HeatMap classes={classes} style={style} />
+              </Grid>
+            )
+          }
+        </Transition>
       </Grid>
     );
   }

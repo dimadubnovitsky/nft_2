@@ -8,6 +8,12 @@ import {
 import { Popover } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
+import { Transition, animated } from 'react-spring';
+import {
+  usePopupState,
+  bindTrigger,
+  bindPopover,
+} from 'material-ui-popup-state/hooks';
 import {
   makeSelectBlockIcons,
   makeSelectFilters,
@@ -38,16 +44,10 @@ const Block = ({
   dispatchUpdateSelectedBlock,
   dispatchClearSelectedBlock,
 }) => {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-    dispatchClearSelectedBlock();
-  };
+  const popupState = usePopupState({
+    variant: 'popover',
+    popupId: 'demoPopover',
+  });
 
   const ownedBlock = ownedBlocks.find((ownedBlock) =>
     ownedBlock.blockIDs.includes(block.id),
@@ -58,9 +58,6 @@ const Block = ({
   const icon = ownedBlock
     ? blockIcons.find((icon) => ownedBlock.iconId === icon.id)
     : null;
-
-  const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
 
   const image = icon && icon.imageName ? icon.imageName : selectedImage;
   const title = icon ? icon.title : 'Original Block';
@@ -75,10 +72,11 @@ const Block = ({
 
   const PopoverBlock = (
     <Popover
-      id={id}
-      open={open}
-      anchorEl={anchorEl}
-      onClose={handleClose}
+      {...bindPopover(popupState)}
+      onClose={() => {
+        dispatchClearSelectedBlock();
+        popupState.close();
+      }}
       anchorOrigin={{
         vertical: 'top',
         horizontal: 'right',
@@ -161,62 +159,85 @@ const Block = ({
     </Popover>
   );
 
-  let isFirstBlock = false;
-  if (ownedBlock) {
-    isFirstBlock = ownedBlock.blockIDs[0] === block.id;
-  }
-
-  let isVisible = true;
-  if (isFilters && ownedBlock) {
-    const isMyLands = user.id === ownedBlock.ownerId;
-    const isForSale = ownedBlock.availableForSale;
-    const isUnavailable = !ownedBlock.availableForSale;
-
-    if (isMyLands && !filters.myLands) {
-      isVisible = false;
-    }
-
-    if (isForSale && !filters.forSale) {
-      isVisible = false;
-    }
-
-    if (isUnavailable && !filters.unavailable) {
-      isVisible = false;
-    }
-  }
-
-  if (ownedBlock && isFirstBlock && isVisible) {
-    return (
-      <>
-        <div
-          className={styles.root}
-          onClick={(event) => {
-            dispatchUpdateSelectedBlock(block);
-            handleClick(event);
-          }}
-        >
-          <img
-            className={`${styles.image} ${
-              ownedBlock.size === 10 ? styles.image10 : styles.image5
-            }`}
-            src={icon.imageName}
-            alt=""
-          />
-        </div>
-        {PopoverBlock}
-      </>
-    );
-  }
-
   return (
     <>
       <div
+        {...bindTrigger(popupState)}
         className={styles.root}
         onClick={(event) => {
           dispatchUpdateSelectedBlock(block);
-          handleClick(event);
+          popupState.toggle(event);
         }}
-      />
+      >
+        <Transition
+          items={ownedBlock}
+          from={{ opacity: 0 }}
+          enter={{ opacity: 1 }}
+          leave={{ opacity: 0 }}
+        >
+          {(style, springOwnedBlock, state) => {
+            const springIcon = springOwnedBlock
+              ? blockIcons.find((icon) => springOwnedBlock.iconId === icon.id)
+              : null;
+
+            let isFirstBlock = false;
+            if (springOwnedBlock) {
+              isFirstBlock = springOwnedBlock.blockIDs[0] === block.id;
+            }
+
+            let isVisible = true;
+            if (isFilters && springOwnedBlock) {
+              const isMyLands = user.id === springOwnedBlock.ownerId;
+              const isForSale = springOwnedBlock.availableForSale;
+              const isUnavailable = !springOwnedBlock.availableForSale;
+
+              if (isMyLands && !filters.myLands) {
+                isVisible = false;
+              }
+
+              if (isForSale && !filters.forSale) {
+                isVisible = false;
+              }
+
+              if (isUnavailable && !filters.unavailable) {
+                isVisible = false;
+              }
+            }
+
+            return (
+              springOwnedBlock &&
+              isFirstBlock && (
+                <Transition
+                  items={isVisible}
+                  from={{ opacity: 0 }}
+                  enter={{ opacity: 1 }}
+                  leave={{ opacity: 0 }}
+                >
+                  {(visibleStyle, springIsVisible) =>
+                    springIsVisible && (
+                      <animated.img
+                        className={`${styles.image} ${
+                          springOwnedBlock.size === 10
+                            ? styles.image10
+                            : styles.image5
+                        }`}
+                        src={springIcon.imageName}
+                        alt=""
+                        style={
+                          state.phase === 'mount' ||
+                          (state.phase === 'enter' && !ownedBlock)
+                            ? style
+                            : visibleStyle
+                        }
+                      />
+                    )
+                  }
+                </Transition>
+              )
+            );
+          }}
+        </Transition>
+      </div>
       {PopoverBlock}
     </>
   );
