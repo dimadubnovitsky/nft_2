@@ -1,6 +1,6 @@
 .wrapper {
   width: 100%;
-  min-height: 100vh;
+  min-height: 100%;
   display: flex;
   justify-content: center;
   background: #000000;
@@ -129,5 +129,56 @@
     line-height: 22px;
     color: #FFFFFF;
     cursor: pointer;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .wrapper {
+    padding: 0 20px;
+  }
+  .buttonBack {
+    top: 20px;
+    left: 20px;
+  }
+
+  .content {
+    padding-top: 80px;
+
+    .logo {
+      width: 40px;
+    }
+
+    .description {
+      padding: 20px 0;
+      font-size: 16px;
+      text-align: center;
+    }
+
+    .cards {
+      flex-direction: column;
+
+      .card {
+        margin-bottom: 10px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    .infoText {
+      padding-top: 20px;
+      text-align: center;
+    }
+
+    .buttonConnect {
+      margin: 20px 0;
+    }
+  }
+
+  .loading {
+    .loadingText {
+      text-align: center;
+    }
   }
 }
