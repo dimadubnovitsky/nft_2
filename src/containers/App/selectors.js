@@ -41,6 +41,9 @@ const makeSelectBlocks = () =>
     return subState.blocks;
   });
 
+const makeSelectAllBlocks = () =>
+  createSelector(selectRoot, (subState) => subState.history[12].blocks);
+
 const makeSelectBlock = () =>
   createSelector(selectRoot, (subState) => {
     const block = subState.block;
@@ -71,6 +74,9 @@ const makeSelectOwnedBlocks = () =>
 
     return subState.ownedBlocks;
   });
+
+const makeSelectAllOwnedBlocks = () =>
+  createSelector(selectRoot, (subState) => subState.history[12].ownedBlocks);
 
 const makeSelectHistory = () =>
   createSelector(selectRoot, (subState) => subState.history);
@@ -120,8 +126,10 @@ export {
   makeSelectOwners,
   makeSelectBlockIcons,
   makeSelectBlocks,
+  makeSelectAllBlocks,
   makeSelectBlock,
   makeSelectOwnedBlocks,
+  makeSelectAllOwnedBlocks,
   makeSelectHistory,
   makeSelectLoading,
   makeSelectLocation,
