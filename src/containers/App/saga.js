@@ -15,6 +15,7 @@ import watchUpdateHeatMap from './sagaWatchers/updateHeatMap';
 import watchClearBlock from './sagaWatchers/clearBlock';
 import watchRefresh from './sagaWatchers/refresh';
 import watchPurchaseBlock from './sagaWatchers/purchaseBlock';
+import watchUpdateIsShowAllBlocks from './sagaWatchers/updateIsShowAllBlocks';
 
 export default function* rootSaga() {
   yield all([
@@ -32,6 +33,7 @@ export default function* rootSaga() {
     fork(watchUpdateTimeline),
     fork(watchUpdateIsHeatMap),
     fork(watchUpdateHeatMap),
+    fork(watchUpdateIsShowAllBlocks),
     fork(watchClearBlock),
     fork(watchRefresh),
   ]);

@@ -15,6 +15,7 @@ const Loader = ({ wrapper }) => {
       animationData,
     });
     return () => animation.destroy(); // optional clean up for unmounting
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   lottie.loadAnimation({

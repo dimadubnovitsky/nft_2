@@ -14,6 +14,7 @@ import {
   updateTimeline,
   updateIsHeatMap,
   updateHeatMap,
+  updateIsShowAllBlocks,
   clearBlock,
   purchaseBlock,
   refresh,
@@ -72,6 +73,7 @@ const initialState = {
   timeline: 0,
   isHeatMap: false,
   heatMap: HeatMap1,
+  isShowAllBlocks: false,
   /**
    * Static
    */
@@ -288,6 +290,11 @@ const globalReducer = handleActions(
     [updateHeatMap.SUCCESS]: produce((draft, { payload: { heatMap } }) => {
       draft.heatMap = heatMap;
     }),
+    [updateIsShowAllBlocks.SUCCESS]: produce(
+      (draft, { payload: { isShowAllBlocks } }) => {
+        draft.isShowAllBlocks = isShowAllBlocks;
+      },
+    ),
     [clearBlock.SUCCESS]: produce((draft) => {
       draft.block = {};
     }),

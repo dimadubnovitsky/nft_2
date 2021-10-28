@@ -25,7 +25,9 @@ class Block extends React.PureComponent {
     const { block, onSubmit, selectedImage, user, onPurchase, loading } =
       this.props;
     const image =
-      block.icon && block.icon.imageName ? block.icon.imageName : selectedImage;
+      block.icon && block.icon.imageName
+        ? `/static/ownerIcons/${block.icon.imageName}`
+        : selectedImage;
     const title = block.icon ? block.icon.title : 'Original Block';
     const website = block.icon ? block.icon.website : '';
     const owner = block.owner ? block.owner.name : 'NFT Inc.';
@@ -43,6 +45,25 @@ class Block extends React.PureComponent {
     const isOwned = typeof block.ownerId !== 'undefined';
     const isNew = block.icon && block.icon.imageName === null;
 
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+    const month = months[new Date().getMonth()];
+    const day = new Date().getDate();
+    const year = new Date().getFullYear();
+    const date = `${month} ${day}, ${year}`;
+
     const initialValues = {
       image: image,
       title: title,
@@ -52,7 +73,7 @@ class Block extends React.PureComponent {
       size: size,
       availableForSale: availableForSale,
       price: price,
-      date: 'August 1, 2030',
+      date: date,
       ownerId: ownerId,
       iconId: iconId,
     };

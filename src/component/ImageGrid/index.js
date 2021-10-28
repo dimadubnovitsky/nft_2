@@ -2,6 +2,7 @@ import React from 'react';
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import MainImage from './assets/img/main.jpg';
+import MainVideo from './assets/video/main.mp4';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -27,16 +28,6 @@ class ImageGrid extends React.PureComponent {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (prevProps.selectedBlock !== this.props.selectedBlock) {
-      console.log({
-        ...prevState,
-        crop: {
-          ...prevState.crop,
-          x: this.cropX,
-          y: this.cropY,
-          width: this.cropWidth,
-          height: this.cropHeight,
-        },
-      });
       this.setState(
         (prevState) => ({
           ...prevState,
@@ -58,9 +49,7 @@ class ImageGrid extends React.PureComponent {
     this.imageRef = image;
   };
 
-  onChange = (crop, cropPercentage) => {
-    console.log(crop, cropPercentage);
-  };
+  onChange = (crop, cropPercentage) => {};
 
   onCropComplete = () => {
     this.makeClientCrop();
@@ -104,8 +93,8 @@ class ImageGrid extends React.PureComponent {
     return new Promise((resolve, reject) => {
       canvas.toBlob((blob) => {
         if (!blob) {
-          //reject(new Error('Canvas is empty'));
-          console.error('Canvas is empty');
+          // reject(new Error('Canvas is empty'));
+          // console.error('Canvas is empty');
           return;
         }
         // eslint-disable-next-line no-param-reassign
@@ -183,7 +172,7 @@ class ImageGrid extends React.PureComponent {
     const { crop, src } = this.state;
 
     return (
-      <>
+      <div className={styles.wrapper}>
         <ReactCrop
           className={styles.root}
           src={src}
@@ -192,7 +181,19 @@ class ImageGrid extends React.PureComponent {
           onChange={this.onChange}
           locked
         />
-      </>
+        <div className={styles.video}>
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            controls={false}
+            style={{ display: 'block', maxWidth: '100%' }}
+          >
+            <source src={MainVideo} type="video/mp4" />
+          </video>
+        </div>
+      </div>
     );
   }
 }

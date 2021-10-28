@@ -110,6 +110,15 @@ const updateHeatMap = createRoutine('APP/UPDATE_HEAT_MAP', {
   }),
 });
 
+const updateIsShowAllBlocks = createRoutine('APP/UPDATE_IS_SHOW_ALL_BLOCKS', {
+  request: (isShowAllBlocks) => ({
+    isShowAllBlocks,
+  }),
+  success: (isShowAllBlocks) => ({
+    isShowAllBlocks,
+  }),
+});
+
 export {
   loadData,
   authorize,
@@ -127,4 +136,5 @@ export {
   updateTimeline,
   updateIsHeatMap,
   updateHeatMap,
+  updateIsShowAllBlocks,
 };

@@ -7,6 +7,7 @@ import {
   makeSelectFilters,
   makeSelectIsFilters,
   makeSelectIsHeatMap,
+  makeSelectIsShowAllBlocks,
   makeSelectIsTimeline,
 } from '../../../App/selectors';
 import {
@@ -21,11 +22,13 @@ import TimerIcon from '@material-ui/icons/Timer';
 import WhatshotIcon from '@material-ui/icons/Whatshot';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import ViewComfyIcon from '@material-ui/icons/ViewComfy';
 import {
   updateFilters,
   updateIsFilters,
   updateIsHeatMap,
   updateIsTimeline,
+  updateIsShowAllBlocks,
 } from '../../../App/actions';
 import HearMapRangeImage from './assets/images/heatMapRange.png';
 import controlsStyle from './styles/controlsStyle';
@@ -93,7 +96,7 @@ const HeatMap = ({ classes, style }) => (
           <Grid item xs={12}>
             <Grid container spacing={1}>
               <Grid item xs={2}>
-                <img src={HearMapRangeImage} />
+                <img src={HearMapRangeImage} alt="Heat Map Price Range" />
               </Grid>
               <Grid item xs={10}>
                 <div className={classes.prices}>
@@ -118,7 +121,9 @@ class Controls extends React.PureComponent {
     super(props);
     this.state = {
       controls: false,
+      showBlocksValue: false,
     };
+    this.animationInterval = null;
   }
 
   onExpand = (value) => {
@@ -127,6 +132,19 @@ class Controls extends React.PureComponent {
       this.props.dispatchUpdateIsFilters(value);
       this.props.dispatchUpdateIsTimeline(value);
       this.props.dispatchUpdateIsHeatMap(value);
+    }
+  };
+
+  setBlockAnimation = (value) => {
+    this.setState({ showBlocksValue: value });
+
+    if (value) {
+      this.animationInterval = setInterval(() => {
+        this.props.dispatchUpdateIsShowAllBlocks(true);
+        setTimeout(() => this.props.dispatchUpdateIsShowAllBlocks(false), 1000);
+      }, 5000);
+    } else {
+      clearInterval(this.animationInterval);
     }
   };
 
@@ -182,6 +200,12 @@ class Controls extends React.PureComponent {
                     value: isHeatMap,
                     onChange: (event, value) => dispatchUpdateIsHeatMap(value),
                     icon: WhatshotIcon,
+                  },
+                  {
+                    name: 'isShowAllBlocks',
+                    value: this.state.showBlocksValue,
+                    onChange: (event, value) => this.setBlockAnimation(value),
+                    icon: ViewComfyIcon,
                   },
                 ]
               : []
@@ -248,6 +272,7 @@ const mapStateToProps = createStructuredSelector({
   filters: makeSelectFilters(),
   isTimeline: makeSelectIsTimeline(),
   isHeatMap: makeSelectIsHeatMap(),
+  isShowAllBlocks: makeSelectIsShowAllBlocks(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -257,6 +282,8 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(updateIsTimeline.request(isTimeline)),
   dispatchUpdateIsHeatMap: (isHeatMap) =>
     dispatch(updateIsHeatMap.request(isHeatMap)),
+  dispatchUpdateIsShowAllBlocks: (isShowAllBlocks) =>
+    dispatch(updateIsShowAllBlocks.request(isShowAllBlocks)),
   dispatchUpdateFilters: (filters) => dispatch(updateFilters.request(filters)),
 });
 

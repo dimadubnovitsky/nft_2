@@ -17,7 +17,7 @@ class Home extends React.PureComponent {
   };
 
   render() {
-    const { blocks, allBlocks, onRefresh } = this.props;
+    const { blocks, allBlocks, onRefresh, isShowAllBlocks } = this.props;
 
     return (
       <div className={styles.root}>
@@ -41,7 +41,7 @@ class Home extends React.PureComponent {
           </div>
         </Hidden>
         <Hidden xsDown>
-          <Grid container spacing={4}>
+          <Grid container spacing={1}>
             <Grid item xs={12}>
               <Header onRefresh={onRefresh} />
             </Grid>
@@ -60,9 +60,14 @@ class Home extends React.PureComponent {
                       </div>
                       <div className={styles.blocks}>
                         {blocks.map((block) => (
-                          <Block block={block} key={block.id} />
+                          <Block
+                            block={block}
+                            key={block.id}
+                            isShowAllBlocks={isShowAllBlocks}
+                          />
                         ))}
                       </div>
+                      <div className={styles.patentText}>Patent pending</div>
                     </div>
                   </Grid>
                   <Grid item xs={2}>

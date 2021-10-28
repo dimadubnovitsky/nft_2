@@ -42,3 +42,17 @@
   display: flex;
   flex-wrap: wrap;
 }
+
+.patentText {
+  width: 100%;
+  text-align: end;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 40px;
+  color: #647191;
+  @media screen and (max-width: 991px) {
+    font-size: 15px;
+    line-height: 30px;
+  }
+}

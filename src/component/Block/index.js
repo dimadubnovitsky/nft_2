@@ -37,7 +37,7 @@ const Block = ({
   block,
   ownedBlocks,
   allOwnedBlocks,
-  mobile,
+  mobile = false,
   owners,
   blockIcons,
   selectedImage,
@@ -45,6 +45,7 @@ const Block = ({
   filters,
   user,
   isTimeline,
+  isShowAllBlocks,
   dispatchUpdateSelectedBlock,
   dispatchClearSelectedBlock,
 }) => {
@@ -71,8 +72,10 @@ const Block = ({
   const icon = ownedBlock
     ? blockIcons.find((icon) => ownedBlock.iconId === icon.id)
     : null;
-
-  const image = icon && icon.imageName ? icon.imageName : selectedImage;
+  const image =
+    icon && icon.imageName
+      ? `/static/ownerIcons/${icon.imageName}`
+      : selectedImage;
   const title = icon ? icon.title : 'Original Block';
   const size = ownedBlock
     ? `${ownedBlock.size * 10}x${ownedBlock.size * 10}`
@@ -235,7 +238,7 @@ const Block = ({
                               ? styles.image10
                               : styles.image5
                           }`}
-                          src={springIcon.imageName}
+                          src={`/static/ownerIcons/${springIcon.imageName}`}
                           alt=""
                           style={
                             state.phase === 'mount' ||
@@ -268,6 +271,7 @@ const Block = ({
               from={{ opacity: 0 }}
               enter={{ opacity: 1 }}
               leave={{ opacity: 0 }}
+              config={{ duration: 500 }}
             >
               {(style, springOwnedBlock, state) => {
                 const springIcon = springOwnedBlock
@@ -299,6 +303,9 @@ const Block = ({
                     isVisible = false;
                   }
                 }
+                if (isShowAllBlocks) {
+                  isVisible = false;
+                }
 
                 return (
                   springOwnedBlock &&
@@ -308,6 +315,7 @@ const Block = ({
                       from={{ opacity: 0 }}
                       enter={{ opacity: 1 }}
                       leave={{ opacity: 0 }}
+                      config={{ duration: 500 }}
                     >
                       {(visibleStyle, springIsVisible) =>
                         springIsVisible && (
@@ -317,7 +325,7 @@ const Block = ({
                                 ? styles.image10
                                 : styles.image5
                             }`}
-                            src={springIcon.imageName}
+                            src={`/static/ownerIcons/${springIcon.imageName}`}
                             alt=""
                             style={
                               state.phase === 'mount' ||

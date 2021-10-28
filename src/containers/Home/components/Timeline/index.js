@@ -108,6 +108,7 @@ const FirstTimelineItem = ({
             src={arrowUp}
             className={classes.arrowUp}
             onClick={() => dispatchUpdateTimeline(index - 1)}
+            alt="Arrow Up"
           />
         )}
         <div className={classes.date}>{historyItem.date}</div>
@@ -115,6 +116,7 @@ const FirstTimelineItem = ({
           src={arrowUp}
           className={classes.arrowDown}
           onClick={() => dispatchUpdateTimeline(index + 1)}
+          alt="Arrow Down"
         />
       </div>
     </TimelineTransition>
@@ -260,6 +262,7 @@ const SixthTimelineItem = ({
           src={arrowUp}
           className={classes.arrowUp}
           onClick={() => dispatchUpdateTimeline(index - 1)}
+          alt="Arrow Up"
         />
         <div className={classes.date}>{historyItem.date}</div>
         {index + 1 !== history.length && (
@@ -267,6 +270,7 @@ const SixthTimelineItem = ({
             src={arrowUp}
             className={classes.arrowDown}
             onClick={() => dispatchUpdateTimeline(index + 1)}
+            alt="Arrow Down"
           />
         )}
       </div>
@@ -277,12 +281,18 @@ const SixthTimelineItem = ({
 const CustomThumbComponent = (sliderProps, classes, history, timeline) => (
   <div {...sliderProps}>
     <di className={classes.thumdWrapper}>
-      {timeline !== 0 && <img src={arrowUp} className={classes.thumdArrowUp} />}
+      {timeline !== 0 && (
+        <img src={arrowUp} className={classes.thumdArrowUp} alt="Arrow Up" />
+      )}
       <div className={classes.date}>
         {history.find((historyItem, index) => index === timeline).date}
       </div>
       {timeline + 1 !== history.length && (
-        <img src={arrowUp} className={classes.thumdArrowDown} />
+        <img
+          src={arrowUp}
+          className={classes.thumdArrowDown}
+          alt="Arrow Down"
+        />
       )}
     </di>
   </div>

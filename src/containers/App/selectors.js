@@ -105,6 +105,9 @@ const makeSelectTimeline = () =>
 const makeSelectIsHeatMap = () =>
   createSelector(selectRoot, (subState) => subState.isHeatMap);
 
+const makeSelectIsShowAllBlocks = () =>
+  createSelector(selectRoot, (subState) => subState.isShowAllBlocks);
+
 const makeSelectHeatMap = () =>
   createSelector(selectRoot, (subState) => {
     if (subState.isTimeline) {
@@ -141,4 +144,5 @@ export {
   makeSelectTimeline,
   makeSelectIsHeatMap,
   makeSelectHeatMap,
+  makeSelectIsShowAllBlocks,
 };

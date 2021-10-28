@@ -31,8 +31,8 @@ const getCroppedImg = (image, blockID) => {
   return new Promise((resolve, reject) => {
     canvas.toBlob((blob) => {
       if (!blob) {
-        //reject(new Error('Canvas is empty'));
-        console.error('Canvas is empty');
+        // reject(new Error('Canvas is empty'));
+        // console.error('Canvas is empty');
         return;
       }
       // eslint-disable-next-line no-param-reassign

@@ -1,5 +1,6 @@
 import styles from './styles/Header.module.scss';
 import logo from '../../images/logo.png';
+import LogoTitle from '../../images/logo_title.png';
 import reload from '../../images/reload.svg';
 import wallet from '../../images/wallet.png';
 import { Link } from 'react-router-dom';
@@ -37,7 +38,7 @@ const Header = ({ isAuthorized, onRefresh }) => (
       </Box>
     </Hidden>
     <Hidden xsDown>
-      <Box paddingX={2.4} paddingY={4}>
+      <Box paddingX={2} paddingY={2}>
         <div className={styles.wrapper}>
           <div className={styles.leftContent}>
             <div className={styles.logo}>
@@ -47,7 +48,13 @@ const Header = ({ isAuthorized, onRefresh }) => (
               <img src={reload} alt="Reload" />
             </div>
           </div>
-          <div className={styles.title}>Million Pixel NFT</div>
+          <div className={styles.title}>
+            <img
+              className={styles.titleImage}
+              src={LogoTitle}
+              alt="Logo Title"
+            />
+          </div>
           {isAuthorized ? (
             <div className={styles.wallet}>
               <div className={styles.walletId}>#123456789</div>
